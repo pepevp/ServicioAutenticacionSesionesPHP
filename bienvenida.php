@@ -1,9 +1,32 @@
 <?php
-// 1. Iniciar la sesión (requisito técnico 1)
+// 1. Requisito: Implementar manejo de sesiones
 session_start();
+
+// 4. Funcionalidad para cerrar sesión (integrada aquí)
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    // Destruir todas las variables de sesión
+    $_SESSION = array();
+
+    // Eliminar la cookie de sesión
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    // 1. Requisito: Destruir la sesión
+    session_destroy();
+
+    // 2. Requisito: Uso de header() para redirección al login
+    header('Location: index.php');
+    exit;
+}
 
 // 3. Protección de acceso: Si no está autenticado, redirigir a 'FalloSesion.php'
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    // REDIRECCIÓN ACTUALIZADA
     header('Location: FalloSesion.php');
     exit;
 }
@@ -81,22 +104,22 @@ $date = date('d/m/Y');
 </head>
 <body>
     <div class="welcome-container">
-        <h1>¡Bienvenido al Sistema!</h1>
+        <h1>¡Acceso Exitoso!</h1>
         
-        <!-- Muestra el nombre del usuario -->
-        <p class="user-name"><?php echo htmlspecialchars($display_name); ?></p>
+        <!-- 2. Muestra el nombre del usuario -->
+        <p class="user-name">Bienvenido, <?php echo htmlspecialchars($display_name); ?></p>
 
         <div class="details-box">
-            <!-- Datos adicionales: Mensaje de bienvenida específico -->
-            <p>Es un placer tenerte de vuelta. Has accedido correctamente al área protegida.</p>
+            <!-- 2. Mensaje de bienvenida específico -->
+            <p>Tu sesión está activa. Este es el área protegida del sistema.</p>
             
-            <!-- Muestra la hora actual y la fecha -->
+            <!-- 2. Muestra la hora actual y la fecha -->
             <span class="time-data">Hora actual: <?php echo $current_time; ?></span>
             <span class="time-data">Fecha de hoy: <?php echo $date; ?></span>
         </div>
 
-        <!-- 4. Funcionalidad para cerrar sesión -->
-        <a href="logout.php" class="logout-link">Cerrar Sesión</a>
+        <!-- 4. Enlace que activa la lógica de logout en este mismo archivo (bienvenida.php?action=logout) -->
+        <a href="bienvenida.php?action=logout" class="logout-link">Cerrar Sesión</a>
     </div>
 </body>
 </html>
