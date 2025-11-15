@@ -4,7 +4,4 @@ bienvenida.php: Es la página protegida. Antes de mostrar cualquier contenido, v
 
 FalloSesion.php: La página de acceso denegado. Se muestra cuando se intenta acceder a la pagina de bienvenida sin haber hecho login.
 
-logout.php: Un script de acción simple que destruye la sesión actual y redirige inmediatamente de vuelta a index.php.
-
-
 En la pagina de login he puesto los 2 usuarios con los que se puede iniciar sesión y su contraseña para poder probarlo, pero obviamente no es algo que se dejaría.
